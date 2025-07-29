@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Flutter Skills Roadmap</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: "Calm Harmony" - A mix of slate, stone, and a gentle sky blue for accents. -->
+    <!-- Application Structure Plan: The application uses a vertical timeline structure, which is the most intuitive way to represent a roadmap. Each phase is a collapsible section, preventing information overload and allowing users to focus on one area at a time. This is more user-friendly than a long, static page. An interactive donut chart is included at the top to provide an immediate visual summary of the time commitment, making the quantitative data more digestible. This structure transforms a text-based report into an exploratory tool for aspiring developers. -->
+    <!-- Visualization & Content Choices: 
+        - Report Info: Phase structure and time estimates (75-145 days total). Goal: Show overall structure and time distribution. Viz/Presentation: Interactive Donut Chart. Interaction: Hover for details. Justification: Provides a high-level, easily understandable summary of the learning effort. Library: Chart.js (Canvas).
+        - Report Info: Phased learning path (Phase 1, 2, 3). Goal: Organize the learning journey logically. Viz/Presentation: Vertical Timeline/Stepper. Interaction: Click to expand/collapse details. Justification: An intuitive and standard UX pattern for step-by-step guides, promoting focused learning. Library/Method: HTML/CSS/JS with Tailwind.
+        - Report Info: Detailed tasks and concepts within each phase. Goal: Provide specific, actionable learning steps. Viz/Presentation: Icon-adorned lists with embedded links. Interaction: Subtle hover effects, clickable links. Justification: Improves readability and visual appeal over plain text lists, directly provides learning resources. Library/Method: HTML/CSS with Tailwind.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: 19px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background-color: #e2e8f0;
+        }
+        .timeline-item:last-child::before {
+            display: none;
+        }
+        .timeline-dot {
+            position: absolute;
+            left: 10px;
+            top: 4px;
+        }
+        .details-content {
+            transition: max-height 0.5s ease-in-out, opacity 0.5s ease-in-out;
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+        }
+        .details-content.open {
+            max-height: 2000px;
+            opacity: 1;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 640px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+
+    <div class="container mx-auto p-4 sm:p-6 md:p-8 max-w-5xl">
+        <header class="text-center mb-10">
+            <h1 class="text-3xl sm:text-4xl font-bold text-slate-900">Interactive Flutter Skills Roadmap</h1>
+            <p class="mt-2 text-slate-600">Your journey to becoming a proficient Flutter developer, broken down into manageable phases.</p>
+        </header>
+
+        <main>
+            <section id="overview" class="mb-12 bg-white p-6 rounded-xl shadow-sm">
+                <h2 class="text-2xl font-semibold text-center mb-4 text-slate-800">Learning Time Distribution</h2>
+                <p class="text-center text-slate-600 mb-6">This chart illustrates the estimated time commitment for the core learning phases. The total time to acquire core skills ranges from <strong>75 to 145 days</strong>.</p>
+                <div class="chart-container">
+                    <canvas id="timeDistributionChart"></canvas>
+                </div>
+            </section>
+
+            <section id="roadmap-timeline">
+                <h2 class="text-2xl font-semibold text-center mb-8 text-slate-800">The Roadmap</h2>
+                <div id="timeline-container" class="space-y-8">
+                </div>
+            </section>
+        </main>
+
+        <footer class="text-center mt-12 py-6 border-t border-slate-200">
+            <p class="text-slate-500">Designed to make your Flutter learning journey clear and achievable.</p>
+        </footer>
+    </div>
+
+    <script>
+        const roadmapData = [
+            {
+                phase: "Phase 1: Foundational Learning & Skill Development",
+                duration: "60-120 Days",
+                description: "This initial phase focuses on acquiring the core technical skills in Flutter and its underlying language, Dart.",
+                daysMin: 60,
+                daysMax: 120,
+                subSections: [
+                    {
+                        title: "1. Choose Your Core Development Path: Flutter",
+                        duration: "5-10 Days",
+                        details: [
+                            { icon: '⚙️', text: "Install the Flutter SDK and configure your IDE (VS Code or Android Studio).", link: "https://flutter.dev/docs/get-started/install" },
+                            { icon: '📚', text: "Familiarize yourself with Flutter's documentation and core philosophy: 'everything is a widget'.", link: "https://flutter.dev/docs/widgets-intro" },
+                            { icon: '📱', text: "Practice running 'hello world' apps on emulators and physical devices.", link: "https://flutter.dev/docs/get-started/test-drive" },
+                            { icon: '⚡', text: "Get comfortable with `hot reload` and `hot restart` for rapid development.", link: "https://flutter.dev/docs/development/tools/hot-reload" }
+                        ]
+                    },
+                    {
+                        title: "2. Master Dart Language & Flutter Framework",
+                        duration: "40-80 Days",
+                        details: [
+                            { icon: '🎯', text: "<strong>Weeks 1-3 (Dart Fundamentals):</strong> Learn Dart syntax, data types, control flow, functions, and OOP principles.", link: "https://dart.dev/guides" },
+                            { icon: '🧱', text: "<strong>Weeks 4-7 (Flutter Core):</strong> Dive into the widget tree, layout widgets (`Row`, `Column`, `Stack`), state management (`setState`, `Provider`, `BLoC`), navigation, and theming.", link: "https://flutter.dev/docs/development/data-and-backend/state-mgmt/options" },
+                            { icon: '🛠️', text: "<strong>Weeks 8-10 (Guided Projects):</strong> Build basic apps like a calculator or to-do list by following tutorials to understand the 'why'.", link: "https://flutter.dev/docs/cookbook" },
+                            { icon: '💡', text: "<strong>Weeks 11-12 (Independent Mini-Projects):</strong> Build a weather app or note-taking app independently to practice problem-solving.", link: "https://www.youtube.com/watch?v=s1D5P-g_01c" }
+                        ]
+                    },
+                    {
+                        title: "3. Learn Backend Basics",
+                        duration: "15-25 Days",
+                        details: [
+                            { icon: '☁️', text: "<strong>Weeks 1-2:</strong> Understand the role of a backend for data storage, authentication, and logic.", link: "https://www.freecodecamp.org/news/what-is-backend-development-a-complete-guide/" },
+                            { icon: '🔥', text: "<strong>Weeks 3-4:</strong> Explore BaaS solutions like Firebase or Supabase, which integrate well with Flutter.", link: "https://firebase.google.com/docs/flutter/setup" },
+                            { icon: '💾', text: "<strong>Week 5:</strong> Implement basic data storage and user authentication in a Flutter app using Firebase or Supabase.", link: "https://firebase.google.com/docs/auth/flutter/start" }
+                        ]
+                    }
+                ]
+            },
+            {
+                phase: "Phase 2: Design Fundamentals & Core App Operations",
+                duration: "10-20 Days",
+                description: "This phase integrates mobile design principles and testing, which are intrinsic to building functional apps.",
+                daysMin: 10,
+                daysMax: 20,
+                subSections: [
+                    {
+                        title: "1. UI/UX Fundamentals for Mobile",
+                        duration: "10-15 Days",
+                        details: [
+                            { icon: '🎨', text: "<strong>Week 1:</strong> Learn UI/UX principles like consistency, hierarchy, and accessibility in a mobile context.", link: "https://www.interaction-design.org/literature/topics/ui-ux-design" },
+                            { icon: '📝', text: "<strong>Week 2:</strong> Practice wireframing and prototyping with tools like Figma to visualize app layouts.", link: "https://www.figma.com/ui-ux-design-tool/" },
+                            { icon: '📱', text: "<strong>Week 3:</strong> Understand and implement Material Design (Android) and Cupertino (iOS) guidelines in your Flutter apps.", link: "https://m3.material.io/" }
+                        ]
+                    },
+                    {
+                        title: "2. Testing & Debugging Essentials",
+                        duration: "5-10 Days",
+                        details: [
+                            { icon: '🧪', text: "<strong>Week 1:</strong> Learn the importance of Unit, Widget, and Integration tests in Flutter.", link: "https://flutter.dev/docs/cookbook/testing" },
+                            { icon: '🐛', text: "<strong>Week 2:</strong> Practice writing simple tests and use Flutter DevTools for debugging, inspecting widgets, and profiling performance.", link: "https://flutter.dev/docs/development/tools/devtools" }
+                        ]
+                    }
+                ]
+            },
+            {
+                phase: "Phase 3: Continuous Learning & Exploration",
+                duration: "Ongoing",
+                description: "App development is a field of constant evolution. Maintaining and growing your skills requires a commitment to continuous learning.",
+                daysMin: 0,
+                daysMax: 0,
+                subSections: [
+                    {
+                        title: "Stay Updated & Deepen Knowledge",
+                        duration: "1-2 hours daily/weekly",
+                        details: [
+                            { icon: '🚀', text: "Explore advanced topics like complex animations, custom painters, and platform channels for native features.", link: "https://flutter.dev/docs/development/ui/animations" },
+                            { icon: '📈', text: "Learn about performance optimization techniques to make your apps faster and more efficient.", link: "https://flutter.dev/docs/perf/rendering/best-practices" },
+                            { icon: '🌐', text: "Engage with the Flutter community on Reddit, Discord, and blogs to stay current with new features and best practices.", link: "https://www.reddit.com/r/FlutterDev/" },
+                            { icon: '🧑‍💻', text: "Contribute to open-source projects or tackle more complex coding challenges to sharpen your skills.", link: "https://github.com/flutter/flutter/wiki/Contributing-to-Flutter" }
+                        ]
+                    }
+                ]
+            }
+        ];
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const timelineContainer = document.getElementById('timeline-container');
+            
+            roadmapData.forEach((phaseData, index) => {
+                const phaseElement = document.createElement('div');
+                phaseElement.className = 'relative timeline-item pl-10';
+                
+                let subSectionsHTML = phaseData.subSections.map(sub => `
+                    <div class="mt-6 p-4 bg-slate-100 rounded-lg">
+                        <h4 class="font-semibold text-slate-800">${sub.title}</h4>
+                        <p class="text-sm text-sky-600 font-medium mb-2">${sub.duration}</p>
+                        <ul class="space-y-2 mt-3">
+                            ${sub.details.map(detail => `
+                                <li class="flex items-start">
+                                    <span class="mr-3 text-lg">${detail.icon}</span>
+                                    <span class="text-slate-600 text-sm">
+                                        ${detail.text}
+                                        ${detail.link ? `<a href="${detail.link}" target="_blank" class="text-sky-500 hover:underline ml-1 text-xs">Learn More</a>` : ''}
+                                    </span>
+                                </li>
+                            `).join('')}
+                        </ul>
+                    </div>
+                `).join('');
+
+                phaseElement.innerHTML = `
+                    <div class="timeline-dot w-5 h-5 bg-white border-2 border-sky-500 rounded-full"></div>
+                    <div class="cursor-pointer bg-white p-4 rounded-xl shadow-sm hover:shadow-md transition-shadow duration-300 phase-header">
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <h3 class="font-bold text-lg text-slate-900">${phaseData.phase}</h3>
+                                <p class="text-sm font-medium text-sky-600">${phaseData.duration}</p>
+                                <p class="text-sm text-slate-500 mt-1">${phaseData.description}</p>
+                            </div>
+                            <span class="transform transition-transform duration-300 text-sky-500 text-2xl arrow">›</span>
+                        </div>
+                    </div>
+                    <div class="pl-4 mt-2 details-content">
+                        ${subSectionsHTML}
+                    </div>
+                `;
+                timelineContainer.appendChild(phaseElement);
+            });
+
+            document.querySelectorAll('.phase-header').forEach(header => {
+                header.addEventListener('click', () => {
+                    const content = header.nextElementSibling;
+                    const arrow = header.querySelector('.arrow');
+                    content.classList.toggle('open');
+                    arrow.classList.toggle('rotate-90');
+                });
+            });
+
+            const ctx = document.getElementById('timeDistributionChart').getContext('2d');
+            const chartData = {
+                labels: roadmapData.filter(p => p.daysMin > 0).map(p => p.phase.split(':')[0]),
+                datasets: [{
+                    label: 'Estimated Minimum Days',
+                    data: roadmapData.filter(p => p.daysMin > 0).map(p => p.daysMin),
+                    backgroundColor: [
+                        'rgba(56, 189, 248, 0.7)',
+                        'rgba(251, 146, 60, 0.7)',
+                    ],
+                    borderColor: [
+                        'rgba(14, 165, 233, 1)',
+                        'rgba(249, 115, 22, 1)',
+                    ],
+                    borderWidth: 1.5,
+                    hoverOffset: 8
+                }]
+            };
+
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: chartData,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                padding: 20,
+                                font: {
+                                    size: 14,
+                                    family: 'Inter, sans-serif'
+                                }
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed !== null) {
+                                        const phaseIndex = context.dataIndex;
+                                        const maxDays = roadmapData[phaseIndex].daysMax;
+                                        label += `${context.parsed}-${maxDays} days`;
+                                    }
+                                    return label;
+                                }
+                            },
+                            bodyFont: {
+                                size: 14,
+                                family: 'Inter, sans-serif'
+                            },
+                            titleFont: {
+                                size: 16,
+                                family: 'Inter, sans-serif'
+                            },
+                            backgroundColor: '#1e293b',
+                            padding: 12,
+                            cornerRadius: 8
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
